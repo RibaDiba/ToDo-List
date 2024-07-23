@@ -10,13 +10,16 @@
           tasks = [
                {
                     name: "",
-                    isDone: false
+                    isDone: false,
+                    id: tasks.length
                }, ...tasks
           ]
+
+          console.log(tasks)
      }
 
      function handleDelete(task) {
-          tasks = tasks.filter(item => item.name !== task.name)
+          tasks = tasks.filter(item => item.id !== task.id)
      }
 
      function handleChecked() {
@@ -38,9 +41,11 @@
                     <div class="input-container">
                          <input type="checkbox" class="done" bind:checked={task.isDone} on:change={handleChecked}>
                          <input type="text" placeholder="Enter Task" class="name-task" bind:value={task.name}>
-                         <button class="close" on:click={() => {
-                              handleDelete(task)
-                         }}>x</button>
+                         <div class="button-container">
+                              <button class="close" on:click={() => {
+                                   handleDelete(task)
+                              }}>x</button>
+                         </div>
                     </div>
                {/each}
           </ul>
@@ -62,6 +67,11 @@
           margin-left: 10rem;
           margin-right: 10rem;
           margin-top: 5rem;
+     }
+
+     .button-container {
+          display: flex;
+          justify-content: center;
      }
 
      .add-tasks {
