@@ -1,152 +1,96 @@
 <script lang="ts">
+	import Task from '$lib/components/Task.svelte';
+	import { remaining } from '$lib/stores/remaining';
+	import { tasks } from '$lib/stores/tasks';
 
-     let tasks: any[] = []
+	let tasks_array: any[] = [];
+	tasks.subscribe((value) => {
+		tasks_array = value;
+	});
 
-     let remaining = 0
+	let count: any;
+	$: tasks_array,
+		remaining.subscribe((value) => {
+			count = value;
+		});
 
-     $: remaining = tasks.length
+	$: tasks_array, remaining.set(tasks.getIsDone());
 
-     function handleTask() {
-          tasks = [
-               {
-                    name: "",
-                    isDone: false,
-                    id: tasks.length
-               }, ...tasks
-          ]
+	function handleTask() {
 
-          console.log(tasks)
-     }
+		tasks.createTask('');
 
-     function handleDelete(task) {
-          tasks = tasks.filter(item => item.id !== task.id)
-     }
-
-     function handleChecked() {
-          tasks.forEach((task) => {
-               if (task.isDone) {
-                    remaining--
-               }
-           })
-     }
-
+		console.log(tasks_array);
+	}
 </script>
 
 <main>
-     <div class="todo-list-container">
-          <h1 class="title">Todo List</h1>
+	<div class="todo-list-container">
+		<h1 class="title">Todo List</h1>
 
-          <ul class="task-list">
-               {#each tasks as task}
-                    <div class="input-container">
-                         <input type="checkbox" class="done" bind:checked={task.isDone} on:change={handleChecked}>
-                         <input type="text" placeholder="Enter Task" class="name-task" bind:value={task.name}>
-                         <div class="button-container">
-                              <button class="close" on:click={() => {
-                                   handleDelete(task)
-                              }}>x</button>
-                         </div>
-                    </div>
-               {/each}
-          </ul>
+		<ul class="task-list">
+			{#each tasks_array as task}
+				<div class="input-container">
+					<Task  {task} />
+				</div>
+			{/each}
+		</ul>
 
-          <div class="divider"></div>
+		<div class="divider"></div>
 
-          <p class="remaining">Tasks Remaining: {remaining}</p>
-          <button class="add-tasks" on:click={handleTask}>Add Tasks</button>
-     </div>
+		<p class="remaining">Tasks Remaining: {count}</p>
+		<button class="add-tasks_array" on:click={handleTask}>Add Task</button>
+	</div>
 </main>
 
 <style>
+	.title {
+		font-family: 'Inter';
+	}
 
-     .title {
-          font-family: 'Inter';
-     }
-     
-     .todo-list-container {
-          margin-left: 10rem;
-          margin-right: 10rem;
-          margin-top: 5rem;
-     }
+	.todo-list-container {
+		margin-left: 10rem;
+		margin-right: 10rem;
+		margin-top: 5rem;
+	}
 
-     .button-container {
-          display: flex;
-          justify-content: center;
-     }
+	.add-tasks_array {
+		outline-style: none;
+		border-style: solid;
+		border-radius: 4px;
+		background-color: black;
+		color: white;
+		padding: 10px;
+		border-color: black;
+		border-width: 3px;
+		transition: 0.4s;
+	}
 
-     .add-tasks {
-          outline-style: none;
-          border-style: solid;
-          border-radius: 4px;
-          background-color: black;
-          color: white;
-          padding: 10px;
-          border-color: black;
-          border-width: 3px;
-          transition: .4s;
-     }
+	.add-tasks_array:hover {
+		background-color: white;
+		color: black;
+		cursor: pointer;
+	}
 
-     .add-tasks:hover {
-          background-color: white;
-          color: black;
-          cursor: pointer;
-     }
+	.add-tasks_array:active {
+		padding: 5px;
+	}
 
-     .add-tasks:active {
-          padding: 5px;
-     }
+	.task-list {
+		display: flex;
+		flex-direction: column;
+		padding: 0px;
+	}
 
-     .name-task {
-          width: 10rem;
-          margin: 10px;
-          padding: 10px;
-          border-style: none;
-          outline: none;
-          position: relative;
-          font-family: 'Inter';
-     }
+	.divider {
+		background-color: whitesmoke;
+		width: auto;
+		height: 5px;
+		margin-bottom: 30px;
+		margin-top: 30px;
+	}
 
-     .task-list {
-          display: flex;
-          flex-direction: column;
-          padding: 0px;
-     }
-
-     .done {
-          width: 20px;
-          height: auto;
-     }
-
-     .input-container {
-          display: flex;
-          justify-items: center;
-     }
-
-     .close {
-          background-color: inherit;
-          border-style: none;
-          outline-style: none;
-          font-family: "Inter";
-          font-size: 20px;
-          cursor: pointer;
-          transition: .4s;
-     }
-
-     .close:active {
-          font-size: 15px;
-     }
-
-     .divider {
-
-          background-color: whitesmoke;
-          width: auto;
-          height: 5px;
-          margin-bottom: 30px;
-          margin-top: 30px;
-     }
-
-     .remaining {
-          font-family: 'Inter';
-     }
-
+	.remaining {
+		font-family: 'Inter';
+	}
 </style>
