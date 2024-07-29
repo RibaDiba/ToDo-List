@@ -3,23 +3,25 @@
 	import { remaining } from '$lib/stores/remaining';
 	import { tasks } from '$lib/stores/tasks';
 
+	// this subscribes the store to a local vairbale for use 
 	let tasks_array: any[] = [];
 	tasks.subscribe((value) => {
 		tasks_array = value;
 	});
 
+	// this subscribes the store to a local variable for use 
 	let count: any;
 	$: tasks_array,
 		remaining.subscribe((value) => {
 			count = value;
 		});
-
+	// updates value based on change (reactive state)
 	$: tasks_array, remaining.set(tasks.getIsDone());
 
+	// add a new task
 	function handleTask() {
-
 		tasks.createTask('');
-
+		// console log for err handling 
 		console.log(tasks_array);
 	}
 </script>
@@ -31,6 +33,7 @@
 		<ul class="task-list">
 			{#each tasks_array as task}
 				<div class="input-container">
+					<!-- pass through task object here (components)-->
 					<Task  {task} />
 				</div>
 			{/each}

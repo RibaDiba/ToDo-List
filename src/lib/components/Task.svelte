@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
 	/**
 	 * @type {any[]}
 	 */
@@ -8,10 +10,12 @@
 	import { remaining } from '$lib/stores/remaining';
 	import { tasks } from '$lib/stores/tasks';
 
+	// delete task based on name and id 
 	function handleDelete(task) {
 		tasks.deleteTask(task.name, task.id);
 	}
 
+	// recalculate remaining on every checkbox input 
 	function handleChecked(task) {
 		let count = 0;
 
@@ -48,6 +52,8 @@
 </main>
 
 <style>
+	/* :active changes css properties when something is clicked */
+
 	.close {
 		background-color: inherit;
 		border-style: none;

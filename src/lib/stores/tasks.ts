@@ -6,11 +6,12 @@ function createTasks(initialValue: any) {
      return {
           subscribe,
           createTask: (name: any) => {
+               // here is the structure of the task object
                update(tasks => [
                     {
                          name: name,
                          isDone: false,
-                         id: tasks.length // TODO: find a better ID generation
+                         id: Math.random() // generates a radnom id 
                     },
                     ...tasks
                ]);
